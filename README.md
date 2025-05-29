@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cloud Environment Simulation
 
 A web-based cloud computing environment simulator that provides three core cloud services: Storage, Database, and Compute services.
@@ -76,3 +77,6 @@ cloud-environment-simulation/
 ## License
 
 MIT License 
+=======
+# CVhazimalralh
+>>>>>>> f36105b9a403e7ab85de987b2984bddf96998ddd
