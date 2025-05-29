@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Database Management</h1>
+    
+    <!-- Create Database Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Create New Database</h5>
+            <form action="{{ url_for('database.create') }}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Database Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="schema" class="form-label">Schema (JSON)</label>
+                    <textarea class="form-control" id="schema" name="schema" rows="5" required></textarea>
+                    <div class="form-text">Example: [{"name": "users", "columns": ["id INTEGER PRIMARY KEY", "name TEXT", "email TEXT"]}]</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Database</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Databases List -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Your Databases</h5>
+            {% if databases %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for db in databases %}
+                            <tr>
+                                <td>{{ db.name }}</td>
+                                <td>{{ db.description }}</td>
+                                <td>{{ db.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="showQueryModal({{ db.id }})">Query</button>
+                                    <form action="{{ url_for('database.delete', db_id=db.id) }}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this database?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No databases created yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Query Modal -->
+<div class="modal fade" id="queryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Execute Query</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="queryForm">
+                    <div class="mb-3">
+                        <label for="query" class="form-label">SQL Query</label>
+                        <textarea class="form-control" id="query" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Execute</button>
+                </form>
+                <div id="queryResults" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+function showQueryModal(dbId) {
+    const modal = new bootstrap.Modal(document.getElementById('queryModal'));
+    const form = document.getElementById('queryForm');
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        const query = document.getElementById('query').value;
+        fetch(`/database/${dbId}/query`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `query=${encodeURIComponent(query)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultsDiv = document.getElementById('queryResults');
+            if (data.error) {
+                resultsDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            } else if (data.results) {
+                let table = '<table class="table table-striped"><thead><tr>';
+                if (data.results.length > 0) {
+                    Object.keys(data.results[0]).forEach(key => {
+                        table += `<th>${key}</th>`;
+                    });
+                    table += '</tr></thead><tbody>';
+                    data.results.forEach(row => {
+                        table += '<tr>';
+                        Object.values(row).forEach(value => {
+                            table += `<td>${value}</td>`;
+                        });
+                        table += '</tr>';
+                    });
+                    table += '</tbody></table>';
+                } else {
+                    table = '<p>No results found.</p>';
+                }
+                resultsDiv.innerHTML = table;
+            } else {
+                resultsDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+            }
+        })
+        .catch(error => {
+            document.getElementById('queryResults').innerHTML = 
+                `<div class="alert alert-danger">Error: ${error.message}</div>`;
+        });
+    };
+    modal.show();
+}
+</script>
+{% endblock %}
+{% endblock %} 

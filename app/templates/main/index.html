@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Cloud Environment Simulation{% endblock %}
+
+{% block content %}
+<div class="row align-items-center min-vh-75">
+    <div class="col-md-6">
+        <h1 class="display-4 mb-4">
+            Cloud Environment Simulation
+        </h1>
+        <p class="lead mb-4">
+            Experience cloud computing services in a simulated environment. Learn, practice, and understand cloud concepts without the complexity of real cloud providers.
+        </p>
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Get Started
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <img src="https://cdn.pixabay.com/photo/2017/01/22/12/07/imac-1999636_1280.png" alt="Cloud Computing" class="img-fluid">
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Our Services</h2>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Storage Service -->
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-hdd fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Cloud Storage</h3>
+                <p class="card-text">
+                    Upload, download, and manage your files in a secure cloud environment. Experience file management similar to popular cloud storage services.
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>File Upload/Download</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Secure Storage</li>
+                    <li><i class="fas fa-check text-success me-2"></i>File Management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Service -->
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-database fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Database Service</h3>
+                <p class="card-text">
+                    Create and manage SQLite databases through a user-friendly interface. Learn database concepts and SQL queries in a safe environment.
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>SQLite Databases</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Query Execution</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Schema Management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compute Service -->
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-code fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Compute Service</h3>
+                <p class="card-text">
+                    Write and execute Python code in a sandboxed environment. Experience cloud-based code execution without the complexity of real cloud providers.
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Python Execution</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Code Editor</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Job Management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h2 class="mb-4">Ready to Get Started?</h2>
+        <p class="lead mb-4">
+            Join our cloud simulation platform and start learning cloud computing concepts today.
+        </p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-user-plus me-2"></i>Create Free Account
+        </a>
+    </div>
+</div>
+{% endblock %} 
